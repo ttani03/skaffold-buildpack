@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: skaffold-buildpacks-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: skaffold-buildpacks-app
+  template:
+    metadata:
+      labels:
+        app: skaffold-buildpacks-app
+    spec:
+      containers:
+        - name: skaffold-buildpacks-container
+          image: skaffold-buildpacks
+          ports:
+            - containerPort: 8000
+          imagePullPolicy: Never
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: skaffold-buildpacks-svc
+spec:
+  ports:
+    - protocol: "TCP"
+      port: 8000
+      targetPort: 8000
+  selector:
+    app: skaffold-buildpacks-app
